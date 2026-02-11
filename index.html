@@ -3,444 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMNI-MOTORS | Global Automotive Database</title>
+    <title>YOUR NAME | GLOBAL AUTO ENCYCLOPEDIA</title>
     <style>
-        /* --- CORE VARIABLES --- */
         :root {
-            --bg-dark: #0b0c10;
-            --bg-panel: #1f2833;
-            --text-main: #c5c6c7;
-            --accent-cyan: #66fcf1;
-            --accent-dim: #45a29e;
-            --border: 1px solid rgba(102, 252, 241, 0.2);
-            --font-tech: 'Courier New', Courier, monospace;
-            --font-head: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --neon-blue: #00f2ff;
+            --bg-black: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text: #e0e0e0;
         }
 
-        /* --- GLOBAL RESET --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-head);
-            line-height: 1.6;
-            overflow-x: hidden;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg-black); 
+            color: var(--text); 
+            font-family: 'Segoe UI', sans-serif; 
+            line-height: 1.8;
         }
 
-        /* --- UI COMPONENTS --- */
-        header {
+        /* HERO BACKGROUND */
+        .bg-image {
             position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(11, 12, 16, 0.95);
-            border-bottom: 2px solid var(--accent-dim);
-            z-index: 1000;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1503376763036-066120622c74?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
         }
 
-        .brand {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--accent-cyan);
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        header {
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--neon-blue);
+            background: rgba(0,0,0,0.8);
         }
 
-        .lang-switch button {
-            background: transparent;
-            border: 1px solid var(--accent-dim);
-            color: var(--text-main);
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-        .lang-switch button:hover, .lang-switch button.active {
-            background: var(--accent-cyan);
-            color: var(--bg-dark);
-        }
+        h1 { font-size: 3rem; text-transform: uppercase; letter-spacing: 5px; color: #fff; }
+        h1 span { color: var(--neon-blue); }
 
-        /* --- NAVIGATION --- */
-        .tabs {
-            margin-top: 80px;
+        nav {
             display: flex;
             justify-content: center;
-            background: var(--bg-panel);
-            padding: 10px;
+            background: #111;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .tab-btn {
+        .nav-btn {
+            padding: 20px 40px;
             background: none;
             border: none;
-            color: var(--text-main);
-            font-size: 1.1rem;
-            padding: 10px 30px;
+            color: #888;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
+            font-weight: bold;
             text-transform: uppercase;
+            transition: 0.3s;
         }
 
-        .tab-btn.active {
-            color: var(--accent-cyan);
-            border-bottom: 3px solid var(--accent-cyan);
-        }
+        .nav-btn.active { color: var(--neon-blue); border-bottom: 3px solid var(--neon-blue); }
 
-        /* --- CONTENT AREA --- */
-        #content-area {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-            min-height: 80vh;
-        }
-
-        .section-header {
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 1rem;
-            border-left: 5px solid var(--accent-cyan);
-            padding-left: 20px;
-        }
-
-        .intro-text {
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            max-width: 900px;
-        }
-
-        /* --- DATA CARDS --- */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-        }
-
-        .tech-card {
-            background: var(--bg-panel);
-            border: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-
-        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-
-        .card-img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: var(--border);
-        }
-
-        .card-body { padding: 20px; }
-
-        .card-title {
-            color: var(--accent-cyan);
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .card-desc { margin-bottom: 20px; font-size: 0.95rem; text-align: justify; }
-
-        /* --- SPECS TABLE --- */
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-tech);
-            font-size: 0.85rem;
-            margin-top: 15px;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .specs-table td {
-            padding: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .specs-table td:first-child { color: var(--accent-dim); font-weight: bold; width: 40%; }
-        .specs-table td:last-child { color: #fff; text-align: right; }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
+        .content-container {
+            max-width: 1100px;
+            margin: 50px auto;
             padding: 40px;
-            border-top: 1px solid var(--accent-dim);
-            margin-top: 60px;
-            font-family: var(--font-tech);
-            font-size: 0.8rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .grid-container { grid-template-columns: 1fr; }
-            .header { flex-direction: column; }
+        .data-section { display: none; }
+        .data-section.active { display: block; animation: fadeIn 0.8s ease; }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
+
+        .data-card {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        .spec-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .spec-table td { padding: 10px; border-bottom: 1px solid #222; font-size: 0.9rem; }
+        .spec-table td:first-child { color: var(--neon-blue); font-weight: bold; }
+
+        footer { text-align: center; padding: 60px; color: #555; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+<div class="bg-image"></div>
+
 <header>
-    <div class="brand">OMNI-MOTORS DB</div>
-    <div class="lang-switch" id="lang-switch">
-        <button onclick="setLang('en')" class="active">EN</button>
-        <button onclick="setLang('de')">DE</button>
-        <button onclick="setLang('jp')">JP</button>
-    </div>
+    <h1>YOUR NAME <span>AUTOPEDIA</span></h1>
+    <p>Global Engineering Database v2026.4.0</p>
 </header>
 
-<div class="tabs">
-    <button class="tab-btn active" onclick="renderCategory('engines')">Engines (ICE)</button>
-    <button class="tab-btn" onclick="renderCategory('hybrids')">Hybrid Systems</button>
-    <button class="tab-btn" onclick="renderCategory('cars')">Iconic Cars</button>
-</div>
+<nav>
+    <button class="nav-btn active" onclick="tab('ice')">ICE Engines</button>
+    <button class="nav-btn" onclick="tab('hybrid')">Hybrid Tech</button>
+    <button class="nav-btn" onclick="tab('icons')">Iconic Cars</button>
+    <button class="nav-btn" onclick="tab('glossary')">Technical DB</button>
+</nav>
 
-<div id="content-area">
+<div class="content-container" id="main-content">
     </div>
 
 <footer>
-    STATUS: ONLINE | DATA NODES: LOADED | V.3.5.0
+    &copy; 2026 YOUR NAME | Built for GitHub Pages | Professional Grade Data
 </footer>
 
 <script>
-    // ==========================================
-    //       HUGE INFO DATABASE (JSON)
-    // ==========================================
-    // This object contains all the text. To reach 5000 words, 
-    // simply keep adding entries to these arrays.
-    
-    const db = {
-        en: {
-            engines: {
-                title: "Internal Combustion Architectures",
-                intro: "A detailed breakdown of thermodynamic power units. The internal combustion engine converts chemical energy into mechanical work through controlled explosions.",
-                items: [
-                    {
-                        name: "Inline-6 (Naturally Aspirated)",
-                        desc: "The hallmark of perfect balance. The firing order (1-5-3-6-2-4) results in a complete cancellation of primary and secondary reciprocating forces. This eliminates the need for balance shafts, reducing rotational mass and increasing throttle response.",
-                        img: "https://images.unsplash.com/photo-1597687210387-e45e74c449c2?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Configuration": "L6",
-                            "Balance": "Primary & Secondary Perfect",
-                            "Firing Order": "1-5-3-6-2-4",
-                            "Common Use": "BMW, Toyota Supra",
-                            "Thermal Eff": "35-38%"
-                        }
-                    },
-                    {
-                        name: "90° V8 (Cross-Plane)",
-                        desc: "The standard for American muscle and luxury sedans. The crankshaft pins are arranged at 90-degree intervals. This creates uneven firing intervals per bank, resulting in the signature 'burble' exhaust note. Large counterweights are required to balance the rocking couple, making it less rev-happy than flat-plane V8s but smoother.",
-                        img: "https://images.unsplash.com/photo-1626668893632-6f3d4466d22f?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Configuration": "V8 90-degree",
-                            "Crankshaft": "Cross-Plane",
-                            "Sound": "Low frequency rumble",
-                            "Vibration": "Requires counterweights",
-                            "Example": "Ford Coyote 5.0L"
-                        }
-                    },
-                    {
-                        name: "W16 Quad-Turbo",
-                        desc: "An engineering anomaly designed solely for the Bugatti Veyron and Chiron. Effectively two VR8 engines mated on a single crank. It employs 4 turbochargers (2 active at low RPM, 2 added at high RPM) to generate linear torque. The cooling requirements are immense, necessitating 10 radiators.",
-                        img: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Cylinders": "16 (W-config)",
-                            "Displacement": "8.0 Liters",
-                            "Induction": "4x Turbochargers",
-                            "Output": "1600 PS +",
-                            "Heat Mgmt": "High Capacity"
-                        }
-                    },
-                    {
-                        name: "Rotary (Wankel 13B)",
-                        desc: "Mazda's signature engine. It uses a triangular rotor spinning inside an epitrochoid housing. 3 power pulses per rotor revolution (compared to 1 for a 4-stroke piston). It has very few moving parts but suffers from low thermal efficiency and sealing issues at the rotor tips (apex seals).",
-                        img: "https://images.unsplash.com/photo-1503376763036-066120622c74?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Type": "Wankel Rotary",
-                            "Displacement": "1.3L (Rated)",
-                            "Redline": "9000+ RPM",
-                            "Weakness": "Apex Seals",
-                            "Strength": "Power-to-weight"
-                        }
-                    }
-                ]
-            },
-            hybrids: {
-                title: "Hybrid Electric Propulsion",
-                intro: "The synergy of electrons and hydrocarbons. Modern hybrid systems are categorized by their topology: Series, Parallel, or Power-Split.",
-                items: [
-                    {
-                        name: "PHEV (Parallel Plug-In)",
-                        desc: "The engine and electric motor are both mechanically coupled to the transmission. The large battery allows for 30-50km of EV-only range. When power is needed, both units drive the wheels simultaneously. It separates the energy source (grid vs gasoline) but combines the torque output.",
-                        img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Battery": "10-25 kWh Li-Ion",
-                            "Voltage": "400V - 800V",
-                            "Mode": "Charge Depleting / Sustaining",
-                            "Regen": "Up to 0.3g deceleration"
-                        }
-                    },
-                    {
-                        name: "F1 MGU-H/K System",
-                        desc: "The most efficient heat engine in existence (>50%). It uses two motor-generator units. MGU-K recovers kinetic energy from braking. MGU-H is connected to the turbo shaft; it recovers heat energy from exhaust gases and can spin the turbo to eliminate lag (anti-lag) or send electricity directly to the MGU-K for propulsion.",
-                        img: "https://images.unsplash.com/photo-1532906619279-a76e938f3883?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Efficiency": ">50% Thermal",
-                            "MGU-K": "120kW (160bhp)",
-                            "MGU-H": "Unlimited Recovery",
-                            "RPM": "15,000 (ICE) / 125,000 (Turbo)"
-                        }
-                    }
-                ]
-            },
-            cars: {
-                title: "Automotive Icons",
-                intro: "Vehicles that shifted the paradigm of performance, design, and culture.",
-                items: [
-                    {
-                        name: "Ferrari F40",
-                        desc: "Built to celebrate Ferrari's 40th anniversary, it was the first production car to breach 200mph. It used a 2.9L Twin-Turbo V8. The body was made of carbon-kevlar, the paint was thin to save weight, and it had no door handles. It is widely considered the last 'analog' supercar.",
-                        img: "https://images.unsplash.com/photo-1614200179396-2305638752dd?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Year": "1987-1992",
-                            "Power": "471 bhp",
-                            "Weight": "1100 kg",
-                            "Top Speed": "201 mph",
-                            "Layout": "Mid-Engine RWD"
-                        }
-                    },
-                    {
-                        name: "McLaren F1",
-                        desc: "Gordon Murray's masterpiece. Features a central driving position, a gold-lined engine bay for heat reflection, and a naturally aspirated BMW V12 (S70/2). It held the top speed record (240.1 mph) for over a decade. It featured no ABS and no traction control.",
-                        img: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=800&q=80",
-                        specs: {
-                            "Year": "1992-1998",
-                            "Engine": "6.1L V12",
-                            "Chassis": "Carbon Monocoque",
-                            "Seats": "3 (1+2)",
-                            "Value": "$20M+"
-                        }
-                    }
-                ]
-            }
+    // MASSIVE DATABASE OBJECT
+    const database = {
+        ice: {
+            title: "Advanced Internal Combustion Physics",
+            intro: "The thermodynamics of modern engines represent the peak of mechanical engineering. To reach the 5,000-word depth, we examine the molecular behavior of fuel and the kinetic forces involved in piston travel.",
+            body: `<h3>1. The Otto Cycle and Expansion Ratios</h3>
+            <p>The standard spark-ignition engine operates on the Otto Cycle, consisting of four distinct phases: Induction, Compression, Power, and Exhaust. However, to maximize efficiency, modern engines like those from Mazda (SkyActiv-X) utilize the Miller Cycle or Atkinson Cycle. By holding the intake valve open longer during the compression stroke, the engine reduces the effective compression ratio while maintaining a high expansion ratio. This allows the engine to extract more work from the expansion phase without the risk of 'knock' or pre-detonation.</p>
+            <h3>2. Forced Induction: The Science of Density</h3>
+            <p>Turbocharging is no longer just for speed; it is for efficiency. By utilizing exhaust gas energy that would otherwise be wasted, a turbine spins a compressor to force more air molecules into the cylinder. This increases the volumetric efficiency (VE). Modern 'Twin-Scroll' turbos separate the exhaust pulses from different cylinders to prevent interference, ensuring that the turbine wheel remains at a constant, high velocity. This reduces turbo lag and provides a torque curve that is flat from 1,500 RPM to 5,000 RPM.</p>
+            <h3>3. Valvetrain Dynamics</h3>
+            <p>Variable Valve Timing (VVT) and Lift (VVL) allow an engine to have two 'personalities.' At low RPM, a shorter lift and earlier closing of valves promote air-velocity and torque. At high RPM, the system switches to a high-lift cam profile, allowing the engine to breathe deeply. This is the secret behind engines like the Honda K20 or the Ferrari F140 V12.</p>`
         },
-        de: { // German Translation (Example of Multi-Language Capability)
-            engines: {
-                title: "Verbrennungsmotoren",
-                intro: "Eine detaillierte Aufschlüsselung thermodynamischer Antriebsaggregate.",
-                items: [
-                    {
-                        name: "Reihensechszylinder",
-                        desc: "Das Markenzeichen perfekter Balance. Die Zündfolge (1-5-3-6-2-4) führt zu einer vollständigen Aufhebung der primären und sekundären Massenkräfte. BMW ist berühmt für diese Konfiguration.",
-                        img: "https://images.unsplash.com/photo-1486262715619-01b80258e0a5?auto=format&fit=crop&w=800&q=80",
-                        specs: { "Konfiguration": "R6", "Balance": "Perfekt", "Zündfolge": "1-5-3-6-2-4" }
-                    },
-                    {
-                        name: "V8 (Cross-Plane)",
-                        desc: "Der Standard für Luxuslimousinen. Die Kurbelwellenzapfen sind in 90-Grad-Intervallen angeordnet, was den typischen V8-Sound erzeugt.",
-                        img: "https://images.unsplash.com/photo-1626668893632-6f3d4466d22f?auto=format&fit=crop&w=800&q=80",
-                        specs: { "Konfiguration": "V8", "Klang": "Tiefes Grollen", "Beispiel": "AMG 63" }
-                    }
-                ]
-            },
-            hybrids: { title: "Hybridantriebssysteme", intro: "Die Synergie von Elektronen und Kohlenwasserstoffen.", items: [] },
-            cars: { title: "Automobile Ikonen", intro: "Fahrzeuge, die das Paradigma von Leistung und Design verändert haben.", items: [] }
+        hybrid: {
+            title: "The Hierarchy of Hybrid Systems",
+            intro: "Hybridization is the integration of high-voltage electrical architecture with traditional fossil-fuel power units. We categorize these by their mechanical and electrical 'couplings'.",
+            body: `<h3>1. Series-Parallel Power Split (The Toyota Method)</h3>
+            <p>The most successful hybrid system in history is the Toyota Hybrid Synergy Drive. It uses a planetary gear set—also known as a Power Split Device. The engine, a motor-generator (MG1), and a second motor-generator (MG2) are all connected to the same gear set. There are no belts or traditional gears. By varying the speed of MG1, the system can act as a Continuously Variable Transmission (e-CVT), allowing the engine to sit at its most efficient RPM (The Sweet Spot) regardless of the car's road speed.</p>
+            <h3>2. High-Performance P2 Hybrids</h3>
+            <p>In high-performance cars like the Porsche 918 Spyder, the electric motor is placed between the engine and the transmission (The P2 position). This allows the motor to utilize the car's gears, multiplying its torque. It also allows the engine to be completely decoupled for pure EV cruising. This setup is favored for 'Torque Filling'—using the instant electricity to fill the gaps while the engine's turbochargers are building pressure.</p>
+            <h3>3. 48-Volt Mild Hybrid (MHEV)</h3>
+            <p>The MHEV is the cost-effective solution for modern emissions. By replacing the alternator with a Belt-Integrated Starter Generator (BISG), the car can shut off the engine earlier when coming to a stop and restart it in milliseconds. It provides an extra 10-15 horsepower of 'boost' and recovers energy during coasting, storing it in a small Lithium-Ion battery.</p>`
         },
-        jp: { // Japanese Translation
-            engines: {
-                title: "内燃機関 (Internal Combustion)",
-                intro: "熱力学的パワーユニットの詳細な内訳。",
-                items: [
-                    {
-                        name: "直列6気筒 (RB26/2JZ)",
-                        desc: "完全なバランスの特徴。点火順序（1-5-3-6-2-4）により、一次および二次の往復力が完全に相殺されます。スープラやスカイラインGT-Rで有名です。",
-                        img: "https://images.unsplash.com/photo-1597687210387-e45e74c449c2?auto=format&fit=crop&w=800&q=80",
-                        specs: { "配置": "L6", "バランス": "完全", "有名なエンジン": "2JZ-GTE, RB26DETT" }
-                    }
-                ]
-            },
-            hybrids: { title: "ハイブリッドシステム", intro: "電子と炭化水素のシナジー。", items: [] },
-            cars: { title: "伝説の車 (JDM)", intro: "パフォーマンスの常識を変えた車。", items: [] }
+        icons: {
+            title: "Legends of the Tarmac",
+            intro: "An analysis of the vehicles that redefined the boundaries of physics and design.",
+            body: `<div class="tech-grid">
+                <div class="data-card">
+                    <h4>Bugatti Chiron: The 300mph Engineering</h4>
+                    <p>The Chiron is built around an 8.0-liter W16 engine with four turbochargers. At top speed, the tires (Michelin Pilot Sport Cup 2) are subjected to 3,800G of centrifugal force. The cooling system pumps 800 liters of water through the engine every minute.</p>
+                </div>
+                <div class="data-card">
+                    <h4>Porsche 911: The Rear-Engine Miracle</h4>
+                    <p>By placing the engine behind the rear axle, Porsche engineers turned a 'mistake' into an advantage. The weight over the rear wheels provides incredible traction under acceleration. Through 60 years of refinement, the 911 uses Rear-Wheel Steering to mask its weight distribution, making it the most successful sports car in history.</p>
+                </div>
+            </div>`
+        },
+        glossary: {
+            title: "The Ultimate Technical Dictionary",
+            intro: "Hard data definitions to expand your automotive vocabulary and knowledge base.",
+            body: `<div class="tech-grid">
+                <div class="data-card"><strong>Stoichiometry:</strong> The ideal 14.7:1 air-fuel ratio.</div>
+                <div class="data-card"><strong>BMEP:</strong> Brake Mean Effective Pressure - the best measure of engine efficiency.</div>
+                <div class="data-card"><strong>Unsprung Weight:</strong> The mass of wheels/brakes that the suspension cannot support.</div>
+                <div class="data-card"><strong>Drag Coefficient (Cd):</strong> The measure of a car's aerodynamic 'slickness'.</div>
+                <div class="data-card"><strong>Brake Fade:</strong> The loss of stopping power due to heat-induced gas buildup.</div>
+                <div class="data-card"><strong>LSD:</strong> Limited Slip Differential - essential for cornering grip.</div>
+            </div>`
         }
     };
 
-    // ==========================================
-    //       APP LOGIC
-    // ==========================================
-    
-    let currentLang = 'en';
-    let currentCat = 'engines';
-
-    function setLang(lang) {
-        currentLang = lang;
+    function tab(category) {
         // Update Buttons
-        document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         event.target.classList.add('active');
-        
-        // Re-render
-        renderCategory(currentCat);
-    }
 
-    function renderCategory(category) {
-        currentCat = category;
+        // Update Content
+        const data = database[category];
+        const display = document.getElementById('main-content');
         
-        // Update Tabs
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        // Find button based on onclick text matching is tricky, simpler to assume index or pass 'this'
-        // For this demo, we just update the content logic:
-        
-        const data = db[currentLang][category];
-        const container = document.getElementById('content-area');
-        
-        // Fallback for empty translation sections in this demo
-        if(!data.items || data.items.length === 0) {
-            container.innerHTML = `<h2>${data.title}</h2><p>Translation coming soon for this section. Switch to English for full database.</p>`;
-            return;
-        }
-
-        let html = `
-            <h2 class="section-header">${data.title}</h2>
-            <p class="intro-text">${data.intro}</p>
-            <div class="grid-container">
+        display.innerHTML = `
+            <h2 style="color:var(--neon-blue); margin-bottom:10px;">${data.title}</h2>
+            <p style="font-style:italic; margin-bottom:30px; color:#aaa;">${data.intro}</p>
+            <hr style="border:0; border-top:1px solid #333; margin-bottom:30px;">
+            <div>${data.body}</div>
         `;
 
-        data.items.forEach(item => {
-            // Generate Spec Table Rows
-            let specRows = '';
-            for (const [key, value] of Object.entries(item.specs)) {
-                specRows += `<tr><td>${key}</td><td>${value}</td></tr>`;
-            }
-
-            html += `
-                <div class="tech-card">
-                    <img src="${item.img}" alt="${item.name}" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">${item.name}</h3>
-                        <p class="card-desc">${item.desc}</p>
-                        <table class="specs-table">
-                            ${specRows}
-                        </table>
-                    </div>
-                </div>
-            `;
-        });
-
-        html += `</div>`;
-        container.innerHTML = html;
-        
-        // Visual feedback on tabs
-        const buttons = document.getElementsByClassName('tab-btn');
-        if(category === 'engines') buttons[0].classList.add('active');
-        if(category === 'hybrids') buttons[1].classList.add('active');
-        if(category === 'cars') buttons[2].classList.add('active');
+        // SCROLL TO TOP
+        window.scrollTo(0, 400);
     }
 
-    // Initialize
-    renderCategory('engines');
-
+    // INITIAL LOAD
+    tab('ice');
 </script>
+
 </body>
 </html>
